@@ -1,0 +1,19 @@
+package com.foodapp.dto.response;
+import java.math.BigDecimal;
+import java.util.List;
+public record OrderResponse(
+    Long id,
+    String orderNumber,
+    String status,
+    Long restaurantId,
+    String restaurantName,
+    List<OrderItemResponse> items,
+    BigDecimal subtotal,
+    BigDecimal deliveryFee,
+    BigDecimal totalAmount,
+    String deliveryAddress,
+    String customerNote,
+    String rejectionReason,
+    java.time.LocalDateTime placedAt,
+    List<OrderStatusHistoryResponse> statusHistory
+) {}
