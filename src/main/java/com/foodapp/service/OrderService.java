@@ -12,6 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
+import com.foodapp.event.OrderPlacedEvent;
+import com.foodapp.event.OrderStatusChangedEvent;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -32,6 +35,7 @@ public class OrderService {
     private final CartRepository cartRepository;
     private final MenuItemRepository menuItemRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Value("${app.order.delivery-fee:40.00}")
     private BigDecimal defaultDeliveryFee;
@@ -41,13 +45,14 @@ public class OrderService {
 
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository, 
                         OrderStatusHistoryRepository historyRepository, CartRepository cartRepository, 
-                        MenuItemRepository menuItemRepository, UserRepository userRepository) {
+                        MenuItemRepository menuItemRepository, UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.historyRepository = historyRepository;
         this.cartRepository = cartRepository;
         this.menuItemRepository = menuItemRepository;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional
@@ -135,6 +140,7 @@ public class OrderService {
         cart.getItems().clear();
         cart.setRestaurant(null);
         cartRepository.save(cart);
+        eventPublisher.publishEvent(new OrderPlacedEvent(order));
         
         return buildOrderResponse(order);
     }
@@ -191,6 +197,7 @@ public class OrderService {
         o.setStatus(OrderStatus.CANCELLED);
         o.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(o);
+        eventPublisher.publishEvent(new OrderStatusChangedEvent(o, OrderStatus.PLACED, OrderStatus.CANCELLED));
         
         OrderStatusHistory history = new OrderStatusHistory();
         history.setOrder(o);

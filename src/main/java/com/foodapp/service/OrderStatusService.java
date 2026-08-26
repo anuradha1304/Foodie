@@ -19,6 +19,8 @@ import com.foodapp.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationEventPublisher;
+import com.foodapp.event.OrderStatusChangedEvent;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -32,15 +34,17 @@ public class OrderStatusService {
     private final OrderStatusHistoryRepository historyRepository;
     private final RestaurantRepository restaurantRepository;
     private final UserRepository userRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public OrderStatusService(OrderRepository orderRepository, OrderItemRepository orderItemRepository,
                               OrderStatusHistoryRepository historyRepository, RestaurantRepository restaurantRepository,
-                              UserRepository userRepository) {
+                              UserRepository userRepository, ApplicationEventPublisher eventPublisher) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
         this.historyRepository = historyRepository;
         this.restaurantRepository = restaurantRepository;
         this.userRepository = userRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     private Restaurant getOwnedRestaurant(Long adminId) {
@@ -91,11 +95,13 @@ public class OrderStatusService {
         if (o.getStatus() != OrderStatus.PLACED) {
             throw new ConflictException("Cannot reject order in status " + o.getStatus(), "INVALID_STATUS_TRANSITION");
         }
+        OrderStatus oldStatus = o.getStatus();
         o.setStatus(OrderStatus.REJECTED);
         o.setRejectionReason(reason);
         o.setUpdatedAt(LocalDateTime.now());
         o = orderRepository.save(o);
         addHistory(o, OrderStatus.REJECTED, reason, adminId);
+        eventPublisher.publishEvent(new OrderStatusChangedEvent(o, oldStatus, OrderStatus.REJECTED));
         return buildOrderResponse(o);
     }
 
@@ -110,10 +116,12 @@ public class OrderStatusService {
         if (!isValidTransition(o.getStatus(), newStatus)) {
             throw new ConflictException("Invalid transition from " + o.getStatus() + " to " + newStatus, "INVALID_STATUS_TRANSITION");
         }
+        OrderStatus oldStatus = o.getStatus();
         o.setStatus(newStatus);
         o.setUpdatedAt(LocalDateTime.now());
         o = orderRepository.save(o); // Will throw OptimisticLockingFailureException on conflict
         addHistory(o, newStatus, note, adminId);
+        eventPublisher.publishEvent(new OrderStatusChangedEvent(o, oldStatus, newStatus));
         return buildOrderResponse(o);
     }
 
