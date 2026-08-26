@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodApp - Order Food Online</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/index.html" class="logo">FoodApp</a>
+            <nav id="nav-links" class="nav-links">
+                <!-- Populated by auth.js -->
+            </nav>
+        </div>
+    </header>
+    <main class="container mt-4">
+        <h1 class="text-center">Welcome to FoodApp</h1>
+        <p class="text-center text-muted">Browse restaurants and order your favorite food!</p>
+        <div id="restaurant-grid" class="mt-4">
+            <!-- Rendered by restaurants.js (M8b) -->
+            <p class="text-center text-muted">Restaurants will appear here...</p>
+        </div>
+    </main>
+    <script type="module" src="/js/auth.js"></script>
+</body>
+</html>

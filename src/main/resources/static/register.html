@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - FoodApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/index.html" class="logo">FoodApp</a>
+        </div>
+    </header>
+    <main class="auth-wrapper">
+        <div class="auth-card">
+            <h1 class="auth-title">Create Account</h1>
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label" for="fullName">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" class="form-control" required>
+                    <span class="form-error" id="error-fullName"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                    <span class="form-error" id="error-email"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="phone">Phone Number</label>
+                    <input type="text" id="phone" name="phone" class="form-control" required>
+                    <span class="form-error" id="error-phone"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" required>
+                    <span class="form-error" id="error-password"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="role">I want to...</label>
+                    <select id="role" name="role" class="form-control">
+                        <option value="CUSTOMER">Order Food</option>
+                        <option value="RESTAURANT_ADMIN">Manage a Restaurant</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%; margin-top:1rem;" id="btn-register">Sign Up</button>
+            </form>
+            <p class="text-center mt-4 text-muted" style="font-size:0.875rem">
+                Already have an account? <a href="/login.html">Log in</a>
+            </p>
+        </div>
+    </main>
+    
+    <script type="module">
+        import { api } from '/js/api.js';
+        import { checkSession } from '/js/auth.js';
+        import { showToast, clearFormErrors, showFormErrors } from '/js/ui.js';
+
+        // Check if already logged in
+        checkSession().then(user => {
+            if (user) {
+                window.location.href = user.role === 'CUSTOMER' ? '/index.html' : '/admin/dashboard.html';
+            }
+        });
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const form = e.target;
+            const btn = document.getElementById('btn-register');
+            clearFormErrors(form);
+            
+            const payload = {
+                fullName: form.fullName.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                password: form.password.value,
+                role: form.role.value
+            };
+            
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>';
+            
+            try {
+                await api.post('/api/auth/register', payload);
+                // On success, login automatically
+                await api.post('/api/auth/login', { email: payload.email, password: payload.password });
+                const user = await checkSession();
+                if (user) {
+                    window.location.href = user.role === 'CUSTOMER' ? '/index.html' : '/admin/dashboard.html';
+                }
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Sign Up';
+                if (err.status === 400 && err.fieldErrors) {
+                    showFormErrors(form, err.fieldErrors);
+                } else {
+                    showToast(err.message || 'Registration failed', 'error');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
