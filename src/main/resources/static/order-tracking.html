@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Track Order - FoodApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        .stepper { display: flex; justify-content: space-between; position: relative; margin: 3rem 0; }
+        .stepper::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 4px; background: var(--border-color); transform: translateY(-50%); z-index: 1; }
+        .stepper-progress { position: absolute; top: 50%; left: 0; height: 4px; background: var(--success); transform: translateY(-50%); z-index: 1; transition: width 0.3s; }
+        .step { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; width: 60px; }
+        .step-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--bg-surface); border: 4px solid var(--border-color); transition: all 0.3s; }
+        .step.active .step-circle { border-color: var(--success); background: var(--success); }
+        .step-label { margin-top: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-align: center; white-space: nowrap; }
+        .step.active .step-label { color: var(--text-main); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/index.html" class="logo">FoodApp</a>
+            <nav id="nav-links" class="nav-links"></nav>
+        </div>
+    </header>
+    <main class="container mt-4" style="max-width: 800px;">
+        <div style="background: var(--bg-surface); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow-sm);">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:1rem; margin-bottom:1rem;">
+                <div>
+                    <h2 id="track-order-number">Loading...</h2>
+                    <p id="track-restaurant-name" class="text-muted"></p>
+                </div>
+                <div style="text-align:right;">
+                    <span id="track-status-badge" style="display:inline-block; padding:0.5rem 1rem; background:var(--bg-color); color:var(--text-main); border-radius:var(--radius-sm); font-weight:700;"></span>
+                </div>
+            </div>
+            
+            <div class="stepper" id="stepper">
+                <div class="stepper-progress" id="stepper-progress" style="width:0%;"></div>
+                <div class="step" data-step="0"><div class="step-circle"></div><div class="step-label">Placed</div></div>
+                <div class="step" data-step="1"><div class="step-circle"></div><div class="step-label">Accepted</div></div>
+                <div class="step" data-step="2"><div class="step-circle"></div><div class="step-label">Preparing</div></div>
+                <div class="step" data-step="3"><div class="step-circle"></div><div class="step-label">Out for Delivery</div></div>
+                <div class="step" data-step="4"><div class="step-circle"></div><div class="step-label">Delivered</div></div>
+            </div>
+            
+            <div id="rejection-box" class="d-none" style="background:var(--accent-light); color:var(--accent); padding:1rem; border-radius:var(--radius-sm); margin-bottom:1.5rem;">
+                <strong>Order Rejected:</strong> <span id="rejection-reason"></span>
+            </div>
+            
+            <div id="cancel-box" class="d-none" style="text-align:center; margin-top:2rem;">
+                <button id="btn-cancel" class="btn btn-outline" style="color:var(--accent); border-color:var(--accent);">Cancel Order</button>
+            </div>
+        </div>
+    </main>
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/tracking.js"></script>
+</body>
+</html>

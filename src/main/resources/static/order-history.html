@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order History - FoodApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/index.html" class="logo">FoodApp</a>
+            <nav id="nav-links" class="nav-links"></nav>
+        </div>
+    </header>
+    <main class="container mt-4" style="max-width:800px;">
+        <h1>Your Orders</h1>
+        <div id="history-container" class="mt-4">
+            <p>Loading...</p>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:2rem;">
+            <button id="btn-prev" class="btn btn-outline d-none">Previous</button>
+            <button id="btn-next" class="btn btn-outline d-none">Next</button>
+        </div>
+    </main>
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/history.js"></script>
+</body>
+</html>

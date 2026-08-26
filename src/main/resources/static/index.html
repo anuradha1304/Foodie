@@ -20,11 +20,22 @@
     <main class="container mt-4">
         <h1 class="text-center">Welcome to FoodApp</h1>
         <p class="text-center text-muted">Browse restaurants and order your favorite food!</p>
-        <div id="restaurant-grid" class="mt-4">
-            <!-- Rendered by restaurants.js (M8b) -->
-            <p class="text-center text-muted">Restaurants will appear here...</p>
+        
+        <div class="search-bar" style="display: flex; gap: 1rem; margin-top: 2rem; align-items: center;">
+            <input type="text" id="search-input" class="form-control" placeholder="Search restaurants..." style="flex: 1;">
+            <select id="cuisine-select" class="form-control" style="width: 200px;">
+                <option value="">All Cuisines</option>
+            </select>
+            <label style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">
+                <input type="checkbox" id="open-only-checkbox"> Open Only
+            </label>
+        </div>
+        
+        <div id="restaurant-grid" class="mt-4" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+            <!-- Rendered by restaurants.js -->
         </div>
     </main>
     <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/restaurants.js"></script>
 </body>
 </html>

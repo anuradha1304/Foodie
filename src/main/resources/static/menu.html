@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu - FoodApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <style>
+        .menu-category { margin-top: 2rem; margin-bottom: 1rem; border-bottom: 2px solid var(--border-color); padding-bottom: 0.5rem; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+        .menu-item-card { background: white; padding: 1rem; border-radius: var(--radius); box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; }
+        .unavailable { opacity: 0.6; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container header-inner">
+            <a href="/index.html" class="logo">FoodApp</a>
+            <nav id="nav-links" class="nav-links"></nav>
+        </div>
+    </header>
+    <main class="container mt-4">
+        <div id="restaurant-info"></div>
+        <div id="menu-container"></div>
+    </main>
+    <script type="module" src="/js/auth.js"></script>
+    <script type="module" src="/js/menu.js"></script>
+</body>
+</html>
