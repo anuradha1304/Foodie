@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate.ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+app:
+  order:
+    delivery-fee: 40.00
+    free-delivery-threshold: 500.00
+    page-size: 10
+  cart:
+    max-quantity: 20

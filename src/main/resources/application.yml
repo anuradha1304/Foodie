@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/food_ordering_dev?useSSL=false&serverTimezone=Asia/Kolkata
+    username: ${DB_USER:foodapp}
+    password: ${DB_PASSWORD:password}
+  jpa:
+    hibernate.ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate.dialect: org.hibernate.dialect.MySQLDialect
+      hibernate.format_sql: true
+      hibernate.jdbc.batch_size: 20
+  sql.init.mode: always
+logging.level.org.hibernate.SQL: DEBUG
+app:
+  order:
+    delivery-fee: 40.00
+    free-delivery-threshold: 500.00
+    page-size: 10
+  cart:
+    max-quantity: 20
