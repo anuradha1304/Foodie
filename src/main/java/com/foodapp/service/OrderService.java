@@ -109,13 +109,12 @@ public class OrderService {
             subtotal = subtotal.add(lineTotal);
             
             OrderItem oi = new OrderItem();
-            oi.setOrder(order);
             oi.setMenuItem(mi);
             oi.setItemName(mi.getName());
             oi.setUnitPrice(mi.getPrice());
             oi.setQuantity(ci.getQuantity());
             oi.setLineTotal(lineTotal);
-            orderItems.add(oi);
+            order.addItem(oi);
         }
         
         BigDecimal deliveryFee = subtotal.compareTo(freeDeliveryThreshold) >= 0 ? BigDecimal.ZERO : defaultDeliveryFee;
@@ -126,10 +125,6 @@ public class OrderService {
         order.setUpdatedAt(LocalDateTime.now());
         
         order = orderRepository.save(order);
-        
-        for (OrderItem oi : orderItems) {
-            orderItemRepository.save(oi);
-        }
         
         OrderStatusHistory history = new OrderStatusHistory();
         history.setOrder(order);

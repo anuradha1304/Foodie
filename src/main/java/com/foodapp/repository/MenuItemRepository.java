@@ -15,4 +15,6 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select m from MenuItem m where m.id in :ids and m.isDeleted = false")
     List<MenuItem> lockAllByIds(@Param("ids") List<Long> ids);
+
+    List<MenuItem> findByRestaurantId(Long restaurantId);
 }

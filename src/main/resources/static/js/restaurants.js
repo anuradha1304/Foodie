@@ -29,13 +29,13 @@ async function loadRestaurants() {
     grid.innerHTML = '<p class="text-muted">Loading...</p>';
     
     const page = await api.get(url);
-    if (!page || page.content.length === 0) {
+    if (!page || page.length === 0) {
         grid.innerHTML = '<p class="text-muted" style="grid-column: 1/-1; text-align: center;">No restaurants found.</p>';
         return;
     }
     
     grid.innerHTML = '';
-    page.content.forEach(r => {
+    page.forEach(r => {
         const card = document.createElement('a');
         card.href = `/menu.html?restaurantId=${r.id}`;
         card.className = 'restaurant-card';

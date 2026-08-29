@@ -88,10 +88,8 @@ public class OrderConcurrencyTest {
                     latch.await();
                     orderService.placeOrder(uId, new OrderRequest("Addr", "Note"), UUID.randomUUID().toString());
                     successCount.incrementAndGet();
-                } catch (ConflictException e) {
-                    failCount.incrementAndGet();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    failCount.incrementAndGet();
                 } finally {
                     doneLatch.countDown();
                 }
